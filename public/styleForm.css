@@ -1,0 +1,247 @@
+@import 'style.css';
+
+
+.container-principal.userPage {
+    height: 100vh;
+    padding: 8% 8% 8% 10%;
+    overflow: hidden;
+    position: relative;
+}
+/* forme */
+.vectorL.userPage {
+    z-index: 4;
+}
+.vectorR.userPage {
+    transform: rotateX(180deg);
+    animation: none;
+    fill: var(--color-accent);
+}
+
+.return {
+    float: left;
+    height: auto;
+    margin: .5rem 1rem;
+    width: 4.5vw;
+    fill: var(--color-secondary);
+}
+
+/* titre */
+.hero-title.userPage {
+    color: var(--color-primary);
+}
+
+form.userPage {
+  position: relative;
+  display: grid;
+  grid:
+    "container-input btn-register" 1fr
+    / 60% 1fr;
+  padding: 4rem;
+  width: clamp(40vw, 60%, 60vw);
+  height: clamp(55vh, 75%, 75vh);
+  margin: 2rem auto;
+  border-radius: 30px;
+  background: var(--color-background);
+  z-index: 1;
+  overflow: hidden;
+}
+form.userPage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: inherit;
+  z-index: -1;
+
+  /* Masque le centre pour ne garder que le contour */
+  -webkit-mask: linear-gradient(var(--color-background) 0 0) content-box, linear-gradient(var(--color-background) 0 0);
+  mask: linear-gradient(var(--color-background) 0 0) content-box, linear-gradient(var(--color-background) 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+    .container-input {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        overflow: visible;
+    }
+
+/* label */
+label.userPage {
+    color: var(--color-primary);
+    font-weight: bold;
+    padding: 1rem 0 .5rem 0;
+    opacity: 0;
+    transition: all .3s ease-in-out;
+}
+label.userPage:nth-child(1) {
+    padding:  0 0 .5rem 0;
+    animation: anim-lineUp 2s ease-out .1s forwards;
+}
+label.userPage:nth-of-type(2) {
+    animation: anim-lineUp 2s ease-out .5s forwards;
+}
+label.userPage:nth-of-type(3) {
+    animation: anim-lineUp 2s ease-out .7s forwards;
+}
+label.userPage:has(+ input.userPage:hover) {
+    color: var(--color-secondary);
+}
+/* input */
+input.userPage {
+    display: inline-block;
+    padding: 12px 14px;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    border: 3px solid var(--color-primary);
+    border-radius: 14px;
+    background-color: var(--color-background);
+    color: var(--color-primary);
+    transition: all 0.4s ease;
+    opacity: 0;
+    z-index: 2;
+}
+input.userPage:nth-of-type(1) {
+    animation: anim-lineUp 2s ease-out .2s forwards;
+}
+input.userPage:nth-of-type(2) {
+    animation: anim-lineUp 2s ease-out .4s forwards;
+}
+input.userPage:nth-of-type(3) {
+    animation: anim-lineUp 2s ease-out .6s forwards;
+}
+input.userPage:hover {
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+    box-shadow: 2px 2px 6px rgb(61, 115, 55, 0.1);
+    z-index: 6;
+}
+input.userPage::placeholder {
+    color: var(--color-primary);
+    opacity: 0.7;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+}
+input.userPage:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: -2px;
+}
+input.userPage:focus::placeholder {
+    color: var(--color-primary);
+}
+input.userPage:hover::placeholder {
+    color: var(--color-secondary);
+}
+
+/* button */
+button.userPage {
+    height: min-content;
+    width:  max-content;
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+    justify-self: end;
+    border: 3px solid var(--color-accent);
+    background-color: var(--color-background);
+    color: var(--color-accent);
+    font-weight: bold;
+    opacity: 0;
+    transition: all .6s ease;
+    animation: anim-lineUp 2s ease-out .8s forwards;
+}
+button.userPage:hover  {
+    background-color: var(--color-background);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    cursor: pointer;
+}
+button.userPage svg {
+    display: inline-block;
+    margin-left: 7px;
+    transition: transform .4s;
+    fill: var(--color-accent);
+    width: 24px;
+    height: auto;
+}
+button.userPage:hover svg {
+    transform: translateX(10px);
+    transition: all .4s;
+    fill: var(--color-secondary);
+}
+
+.btn-co {
+    position: absolute;
+    font-family: var(--font-primary);
+    background-color: var(--color-secondary);
+    bottom: 15%;
+    right: 10%;
+}
+
+@media (max-width: 599px) {
+    .container-principal.userPage {
+        padding: 15% 10% 0 6%;
+    }
+
+    /* forme */
+        .vector.userPage {
+            overflow: visible;
+            z-index: 4;
+        }
+        .vectorL.userPage {
+            left: auto;
+            width: 75%;
+            height: 75%;
+            bottom: -10%;
+            right: -70%;
+        }
+        .vectorR.userPage {
+            right: auto;
+            left: -50px;
+            top: -15px;
+            width: 55%;
+            height: 40%;
+        }
+
+    .hero-title.userPage {
+        color: var(--color-accent);
+    }
+
+    /* form */
+    form.userPage {
+        display: grid;
+        grid:
+            "container-input" 60%
+            "btn-register" 1fr
+            / 1fr;
+        padding: 2rem;
+        width: clamp(50vw, 80%, 70vw);
+        height: clamp(50vh, 60%, 70vh);
+        margin: 2rem auto;
+    }
+    form.userPage::before {
+        background: linear-gradient(0deg, var(--color-primary) 30%, var(--color-accent) 70%);
+    }
+
+    label.userPage {
+        color: var(--color-accent);
+    }
+    label.userPage:nth-of-type(3) {
+        color: var(--color-primary);
+    }
+
+    input.userPage, input.userPage::placeholder {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+    input.userPage:nth-of-type(3), input.userPage:nth-of-type(3)::placeholder {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+    button.userPage {
+        border: 3px solid var(--color-primary);
+        color: var(--color-primary);
+    }
+    button.userPage svg {
+        fill: var(--color-primary);
+    }
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styleForm.css">
+    <script type="module" src="main.js" defer></script>
+    
+    <title>Page de connexion</title>
+</head>
+<body>
+    <div class="container-principal userPage">
+        <!-- forme -->
+        <svg class="vectorL vector userPage" xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="4550 0 3460 5805" preserveAspectRatio="xMidYMid meet">
+            <g stroke="none">
+                <path d="M0 2900 l0 2905 1550 0 1551 0 34 -73 c40 -85 86 -265 111 -430 25 -175 16 -443 -21 -632 -39 -198 -72 -295 -146 -425 -54 -96 -78 -126 -163 -207 -186 -176 -361 -284 -802 -490 -169 -79 -288 -153 -390 -244 -38 -34 -85 -73 -104 -87 -56 -42 -141 -121 -193 -182 -75 -85 -142 -232 -179 -390 -17 -76 -20 -133 -24 -535 -6 -610 -19 -808 -70 -1025 -51 -214 -127 -398 -211 -512 -158 -211 -475 -451 -698 -528 -68 -24 -184 -50 -221 -50 l-24 0 0 2905 z"></path>
+            </g>
+        </svg>
+        <svg class="vectorR vector userPage" xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 6810 9922" preserveAspectRatio="xMidYMid meet">
+            <g stroke="none">
+            <path d="M 13710 2599 c -273 10 -497 53 -775 147 c -334 113 -385 138 -693 337 c -95 62 -279 225 -409 363 c -81 85 -230 276 -255 326 c -7 14 -28 50 -47 80 c -55 89 -182 383 -252 588 c -17 48 -45 127 -64 177 c -39 107 -95 324 -195 765 c -105 459 -173 718 -221 841 c -28 74 -62 161 -74 194 c -73 199 -272 537 -385 657 c -41 44 -95 103 -120 131 c -25 28 -178 185 -341 348 c -163 164 -321 326 -351 361 c -91 105 -166 221 -243 376 c -110 219 -167 390 -210 627 c -22 121 -32 489 -16 593 c 24 151 52 298 67 350 l 15 52 l 2339 0 l 2340 0 l 0 -3660 c 0 -3480 -1 -3660 -17 -3658 c -10 1 -52 3 -93 5 Z "></path>                </g>
+        </svg>
+
+        <a href="index.html" class="return" aria-label="retour au menu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M41.4 297.4C28.9 309.9 28.9 330.2 41.4 342.7L169.4 470.7C181.9 483.2 202.2 483.2 214.7 470.7C227.2 458.2 227.2 437.9 214.7 425.4L141.3 352L576 352C593.7 352 608 337.7 608 320C608 302.3 593.7 288 576 288L141.3 288L214.7 214.6C227.2 202.1 227.2 181.8 214.7 169.3C202.2 156.8 181.9 156.8 169.4 169.3L41.4 297.3z"/></svg>
+        </a>
+        <h1 class="hero-title userPage lineUp">Connexion</h1> 
+
+        <!-- formulaire -->
+        <form class="form userPage" id="loginForm" action="/login" method="POST" autocomplete="off">
+            <div class="container-input">
+                <label for="username" class="userPage">Nom</label>
+                <input id="username" class="userPage" type="text" name="username" placeholder="Nom d'utilisateur" required minlength="4">
+                <label for="password" class="userPage">Mot de passe</label>
+                <input id="password" class="userPage" type="password" name="password" placeholder="Mot de passe" required minlength="6" autocomplete="new-password"> 
+            </div>
+            
+            <button class="btn-accent btn-login userPage" type="submit">
+                Se connecter
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M566.6 342.6C579.1 330.1 579.1 309.8 566.6 297.3L406.6 137.3C394.1 124.8 373.8 124.8 361.3 137.3C348.8 149.8 348.8 170.1 361.3 182.6L466.7 288L96 288C78.3 288 64 302.3 64 320C64 337.7 78.3 352 96 352L466.7 352L361.3 457.4C348.8 469.9 348.8 490.2 361.3 502.7C373.8 515.2 394.1 515.2 406.6 502.7L566.6 342.7z"/></svg>
+            </button>
+        </form>
+        
+        <span class="btn-accent btn-co userPage">
+            <a id="btn-login" href="register.html">Inscription</a>
+        </span>
+    </div>
+</body>
+</html>
