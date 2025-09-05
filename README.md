@@ -26,8 +26,4 @@
 # Cloner le projet
 git clone https://github.com/BuonomoLea/MatchaDesign.git
 
-# Installer les dépendances
-npm install
-
-# Lancer le serveur
-npm start
+Installer les dépendances et lancer le serveur
