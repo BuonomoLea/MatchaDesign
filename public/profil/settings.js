@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
       options.style.display = 'none';
 
       // changer la langue du site :
+      
     });
   });
 

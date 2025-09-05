@@ -1,4 +1,4 @@
-import '/profil/settings.js';
+import 'profil/settings.js';
 
 // Register
 const registerForm = document.getElementById('registerForm');

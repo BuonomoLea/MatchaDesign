@@ -713,7 +713,9 @@ button, #btnHeader {
 .card h2, .card p {
   color: var(--color-accent-light);
 }
-
+.card.no-profil {
+    margin: 0 auto;
+}
 .return {
     float: left;
     height: auto;
