@@ -11,6 +11,7 @@
   overflow: hidden;
   position: relative;
 }
+/* lightbox des avatars */
     .lightbox-avatar {
         position: absolute;
         left: 30%;
@@ -21,47 +22,45 @@
     .lightbox-avatar.active {
         display: block;    
     }
-
-    .avatar-gallery {
-        display: grid;
-        grid-template-columns: 100%;
-        grid-template-rows: 1fr 1fr;
-        background-color: var(--color-accent);
-        border-radius: 30px;
-    }
-    .avatar-grid {
-        width: max-content;
-        height: min-content;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-    }
-        .avatar-gallery img {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            cursor: pointer;
-            object-fit: cover;
-            margin: .5rem;
-            transition: transform 0.2s, box-shadow 0.2s;
+        .avatar-gallery {
+            display: grid;
+            grid-template-columns: 100%;
+            grid-template-rows: 1fr 1fr;
+            background-color: var(--color-accent);
+            border-radius: 30px;
         }
-        .avatar-gallery img:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        .avatar-grid {
+            width: max-content;
+            height: min-content;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
         }
-
-
+            .avatar-gallery img {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                cursor: pointer;
+                object-fit: cover;
+                margin: .5rem;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+            .avatar-gallery img:hover {
+                transform: scale(1.1);
+                box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            }
+/* titre et fleche de retour */
 .top {
     display: flex;
     align-items: center;
 }
-    .top h1 {
-        white-space: nowrap;
-        width: max-content;
-        font-size: clamp(32px, 5vw, 48px);
-    }
+.top h1 {
+    white-space: nowrap;
+    width: max-content;
+    font-size: clamp(32px, 5vw, 48px);
+}
 
 /* Colonnes */
 .profile-left,
@@ -73,7 +72,6 @@
     padding: .5rem;
     overflow: hidden;
 }
-
 /* Figures */
 .profile-left figure, .profile-right figure {
   display: flex;
@@ -85,6 +83,22 @@
     width: 100%;
     height: 30%;
 }
+.avatar-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 40%;
+}
+.avatar-title svg {
+    fill: var(--color-secondary);
+    width: 10%;
+}
+    #openAvatar {
+        cursor: pointer;
+        padding: 5%;
+        fill: var(--color-secondary);
+        width: 20%;
+    }
 
 /* Sections */
 .profile-left section,
@@ -108,7 +122,6 @@
         width: 6rem;
         height: 6rem;
     }
-
 /* right */
 .profile-right section {
     min-height: max-content;
@@ -119,6 +132,7 @@
 }
 .profile-right .profile-section:nth-of-type(1) {
     min-height: 75%;
+    width: 100%;
 }
 .profile-info {
     display: flex;
@@ -129,11 +143,32 @@
 }
 .profile-right .profile-info {
     min-height: 50%;
+    width: 100%;
 }
-#btnModifierProfil {
+.profile-right dt {
+    padding-top: .5rem;
+}
+    .input-profil {
+        border: 2px solid var(--color-secondary);
+        border-radius: .4rem;
+        padding: 8px 12px;
+        min-width: 45vw;
+    }
+    .input-profil:focus {
+        outline: none;
+        border: 2px solid var(--color-accent);
+        color: var(--color-accent);
+    }
+
+.btn-profils {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 1rem;
     overflow: visible;
+    width: 100%;
 }
+
 .titre-infos.over-visible {
     height: max-content;
     margin: 0;
@@ -141,6 +176,8 @@
 .over-visible {
     overflow: visible;
 }
+
+/* custom lang */
 .profile-right section.inline-lang {
     width: 100%;
     height: min-content;
@@ -149,38 +186,16 @@
     align-items: flex-end;
     justify-content: flex-end;
 }
-/* custom lang */
 .inline-lang h2 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
   white-space: nowrap;
   color: var(--color-primary);
 }
 .language-selector {
     width: min-content;
+    margin-right: .5rem;
 }
-/* .language-selector select {
-  border: none;
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 8px 12px;
-  cursor: pointer;
-  background-color: var(--color-accent-light);
-  color: var(--color-accent);
-  border-radius: 8px;
-  margin: 0 0 0 .5rem;
-}
-.language-selector select option {
-  background-color: var(--color-background);
-  color: var(--color-primary);
-  border: none;
-  padding: 6px 12px;
-
-}
-.language-selector select option:focus {
-  outline: none;    
-} */
-
 .custom-select {
   position: relative;
   width: max-content;
@@ -191,9 +206,9 @@
   overflow: visible;
 }
 .custom-select .selected {
-  background-color: var(--color-accent-light);
-  color: var(--color-accent);
-  padding: 8px 12px;
+  background-color: var(--color-accent);
+  color: var(--color-accent-light);
+  padding: 8px 16px;
   border-radius: 8px;
   -webkit-user-select: none;
   user-select: none;
@@ -220,10 +235,14 @@
 }
 
 .custom-select .options li:hover {
-  background-color: var(--color-accent-light);
+  background-color: var(--color-accent);
+  color: var(--color-accent-light);
   border-radius: 6px;
 }
 /* custom theme */
+#titre-actions {
+    margin: 0 0 1rem 0;
+}
 .settings-top {
     height: max-content;
     width: max-content;

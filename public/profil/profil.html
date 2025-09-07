@@ -4,40 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="/public/profil/profil.css">
-    <script src="/public/profil/settings.js" defer></script>
+    <link rel="stylesheet" href="../profil/profil.css">
+    <script src="../profil/settings.js" defer></script>
     <title>Page de profil utilisateurs</title>
 </head>
 <body>
     <main id="contenu-principal" class="container-principal profile-page">
-        <!-- Galerie d'avatars -->
-        <section class="lightbox-avatar">
+        <!-- Lightbox galerie d'avatars -->
+        <section id="lightboxAvatar" class="lightbox-avatar">
             <div class="avatar-gallery" aria-label="Choisir un avatar">
                 <div class="avatar-woman avatar-grid">
-                    <img src="/public/img/avatar/chocolateWomanBlack.png" alt="Avatar 2">
-                    <img src="/public/img/avatar/forestWomanGreen.png" alt="Avatar 4">
-                    <img src="/public/img/avatar/lemonWomanYellow.png" alt="Avatar 6">
-                    <img src="/public/img/avatar/oceanWomanBlue.png" alt="Avatar 8">
-                    <img src="/public/img/avatar/sunsetWomanRed.png" alt="Avatar 10">
+                    <img id="avatarFCHoco" src="../img/avatar/chocolateWomanBlack.png" alt="Avatar de femme, theme Chocolate">
+                    <img id="avatarFMatcha" src="../img/avatar/forestWomanGreen.png" alt="Avatar de femme, theme Matcha">
+                    <img id="avatarFLemon" src="../img/avatar/lemonWomanYellow.png" alt="Avatar de femme, theme Lemon">
+                    <img id="avatarFSailor" src="../img/avatar/oceanWomanBlue.png" alt="Avatar de femme, theme Sailor">
+                    <img id="avatarFSunset" src="../img/avatar/sunsetWomanRed.png" alt="Avatar de femme, theme Sunset">
                 </div>
                 <div class="avatar-man avatar-grid">
-                    <img src="/public/img/avatar/chocolateMenBlack.png" alt="Avatar 1">
-                    <img src="/public/img/avatar/forestManPurple.png" alt="Avatar 3">
-                    <img src="/public/img/avatar/lemonManYellow.png" alt="Avatar 5">
-                    <img src="/public/img/avatar/oceanManBlue.png" alt="Avatar 7">
-                    <img src="/public/img/avatar/sunsetManRed.png" alt="Avatar 9">
+                    <img id="avatarMCHoco" src="../img/avatar/chocolateMenBlack.png" alt="Avatar d'homme', theme Chocolate">
+                    <img id="avatarMMatcha" src="../img/avatar/forestManPurple.png" alt="Avatar d'homme, theme Matcha">
+                    <img id="avatarMLemon" src="../img/avatar/lemonManYellow.png" alt="Avatar d'homme, theme Lemon">
+                    <img id="avatarMSailor" src="../img/avatar/oceanManBlue.png" alt="Avatar d'homme, theme Sailor">
+                    <img id="avatarMSunset" src="../img/avatar/sunsetManRed.png" alt="Avatar d'homme, theme Sunset">
                 </div>
             </div>                
         </section>
+
         <!-- Colonne gauche : identité -->
         <aside class="profile-left card">
             <div class="top">
-                <a href="/public/index.html" class="return" aria-label="Retour au menu">
+                <a href="../index.html" class="return" aria-label="Retour au menu">
                     <!-- Icône retour -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                         <path d="M41.4 297.4C28.9 309.9 28.9 330.2 41.4 342.7L169.4 470.7C181.9 483.2 202.2 483.2 214.7 470.7C227.2 458.2 227.2 437.9 214.7 425.4L141.3 352H576c17.7 0 32-14.3 32-32s-14.3-32-32-32H141.3l73.4-73.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L41.4 297.3z"/>
                     </svg>
-                    
                 </a>
                 <h1>Mon profil</h1>            
             </div>
@@ -46,18 +46,21 @@
                 <h2 id="titre-identite">Identité</h2>
 
                 <figure class="profile-avatar">
-                    <img id="avatarProfil" src="/public/img/avatar/chocolateMenBlack.png" alt="Avatar de profil actuel : femme aux cheveux bruns souriante">
-                    <figcaption>Avatar de profil</figcaption>
+                    <img data-field="avatarProfil" id="avatarProfil" src="../img/avatar/chocolateMenBlack.png" alt="Avatar de profil actuel : femme aux cheveux bruns souriante">
+                    <figcaption class="avatar-title">
+                        Avatar de profil
+                        <svg id="openAvatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Pro v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc.--><path d="M416.9 85.2L372 130.1L509.9 268L554.8 223.1C568.4 209.6 576 191.2 576 172C576 152.8 568.4 134.4 554.8 120.9L519.1 85.2C505.6 71.6 487.2 64 468 64C448.8 64 430.4 71.6 416.9 85.2zM338.1 164L122.9 379.1C112.2 389.8 104.4 403.2 100.3 417.8L64.9 545.6C62.6 553.9 64.9 562.9 71.1 569C77.3 575.1 86.2 577.5 94.5 575.2L222.3 539.7C236.9 535.6 250.2 527.9 261 517.1L476 301.9L338.1 164z"/></svg>
+                    </figcaption>
                 </figure>
 
                 <dl class="profile-info">
                     <div>
                         <dt>Nom d’utilisateur</dt>
-                        <dd>Léa</dd>
+                        <dd>Nom</dd>
                     </div>
                     <div>
                         <dt>Adresse e‑mail</dt>
-                        <dd>lea@example.com</dd>
+                        <dd>email@example.com</dd>
                     </div>
                     <div>
                         <dt>Mot de passe</dt>
@@ -67,36 +70,40 @@
             </section>
         </aside>
 
-        <!-- Colonne droite : infos perso + actions -->
+        <!-- Colonne droite : infos perso + lang + theme -->
         <section class="profile-right card">
-
             <section class="profile-section over-visible" aria-labelledby="titre-infos">
                 <h2 class="titre-infos over-visible" id="titre-infos">Informations personnelles</h2>
                 <dl class="profile-info">
                     <div>
                         <dt>Description</dt>
-                        <dd>Passionnée de développement web et de design.</dd>
+                        <dd data-field="description">Décris toi en une ligne</dd>
                     </div>
                     <div>
                         <dt>Métier</dt>
-                        <dd>Développeuse front‑end</dd>
+                        <dd data-field="job">Quel est ton rôle ?</dd>
                     </div>
                     <div>
                         <dt>Date de naissance</dt>
-                        <dd>12 mars 1995</dd>
+                        <dd><input data-field="birthdate" class="input-profil" type="date" id="birthdate" name="birthdate" aria-label="date de naissance" min="1910-01-01" max="2010-12-31" required></dd>
                     </div>
                     <div>
-                        <dt>Courte bio</dt>
-                        <dd>J’aime créer des interfaces intuitives et esthétiques, et partager mes connaissances avec la communauté.</dd>
+                        <dt>Biographie</dt>
+                        <dd data-field="bio">Présente toi un peu plus</dd>
                     </div>
                 </dl>
 
-                <button id="btnModifierProfil" type="button" class="btn-accent" aria-label="Passer en mode modification du profil">Modifier</button>
+                <div class="btn-profils">
+                    <button id="btnModifierProfil" type="button" class="btn-accent" aria-label="Passer en mode modification du profil">Modifier</button>
+                    <button id="btnDeconnect" type="button" class="btn-accent btn-deconnect" aria-label="Déconnexion du profil">Déconnexion</button>
+                </div>
+
+                
                 <section class="inline-lang over-visible" aria-labelledby="titre-langue">
                     <h2 id="titre-langue">Langue :</h2>
                     <div class="language-selector over-visible">
                         <div class="language-selector custom-select over-visible">
-                            <div class="selected over-visible" data-value="fr">Français (FR)</div>
+                            <div class="selected over-visible" data-field="language" data-value="fr">Français (FR)</div>
                             <ul class="options over-visible">
                                 <li data-value="fr">Français (FR)</li>
                                 <li data-value="en">English (EN)</li>
@@ -107,19 +114,17 @@
 
                     </div>
                 </section>
-
-
             </section>
-
+            <!-- theme -->
             <section class="profile-section" aria-labelledby="titre-theme">
                 <h2 id="titre-actions">Thème du site</h2>
                 <div class="settings-top">
                     <div class="settings-bar">
-                        <button type="button" class="btn-accent btn-theme" data-theme="forest">Matcha</button>
-                        <button type="button" class="btn-accent btn-theme" data-theme="ocean">Sailor</button>
-                        <button type="button" class="btn-accent btn-theme" data-theme="sunset">Sunset</button>
-                        <button type="button" class="btn-accent btn-theme" data-theme="chocolate">Chocolate</button>
-                        <button type="button" class="btn-accent btn-theme" data-theme="lemon">Lemon</button>
+                        <button type="button" class="btn-accent btn-theme" data-field="theme" data-theme="forest">Matcha</button>
+                        <button type="button" class="btn-accent btn-theme" data-field="theme" data-theme="ocean">Sailor</button>
+                        <button type="button" class="btn-accent btn-theme" data-field="theme" data-theme="sunset">Sunset</button>
+                        <button type="button" class="btn-accent btn-theme" data-field="theme" data-theme="chocolate">Chocolate</button>
+                        <button type="button" class="btn-accent btn-theme" data-field="theme" data-theme="lemon">Lemon</button>
                     </div>
                 </div>
             </section>

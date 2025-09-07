@@ -1,10 +1,9 @@
 const express = require('express');
 const session = require('express-session');
-const morgan = require('morgan'); 
-// const bodyParser = require('body-parser'); 
+const morgan = require('morgan');
 const helmet = require('helmet');
 const bcrypt = require('bcrypt');
-const db = require('./database/db'); 
+const db = require('./database/db');
 
 const app = express();
 const PORT = 3000;
@@ -19,33 +18,16 @@ app.use(express.urlencoded({ extended: true }));
 
 // session
 app.use(session({
-    secret: process.env.SESSION_SECRET_PASS || 'Ma_secret_super_ultra_secure',
-    resave: false,
-    saveUninitialized: false
+  secret: process.env.SESSION_SECRET_PASS || 'Ma_secret_key_ultra_secure',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax'
+  }
 }));
-app.use(express.static('public'));
 
-// Newsletter
-// app.post('/newsletter', (req, res) => {
-//     const { email } = req.body;
-//     if(!email) {
-//         return res.status(400).json({message: 'Email requis'});
-//     }
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-//     if (!emailRegex.test(email)) { 
-//         return res.status(400).json({ message: 'Format d’email invalide' }); 
-//     } 
-//     db.run(`INSERT INTO newsletter (email) VALUES (?)`, [email], function(err) {
-//         if (err) {
-//             if (err.code === 'SQLITE_CONSTRAINT') { 
-//                 return res.status(409).json({ message: 'Cet email est déjà inscrit' }); 
-//             }
-//             console.error('Erreur SQLite :', err);
-//             return res.status(500).json({ message: 'Erreur du serveur pas d’insertion à la bdd'});
-//         }
-//         res.json({ message: 'Inscription réussie'});
-//     });
-// });
 
 // register
 app.post('/register', async (req, res) => {
@@ -105,49 +87,179 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ message: "Erreur interne" });
   }
 });
+  // Visualiser les utilisateurs inscrits
+  app.get('/users', (_, res) => {
+    db.all('SELECT * FROM users', (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
+      }
+      res.json(rows);
+    });
+  });
+  // visualiser les erreur de la base users
+  app.get('/debug-schema', (_, res) => {
+    db.all("PRAGMA table_info(users);", (err, rows) => {
+      if (err) return res.status(500).json({ message: 'Erreur' });
+      res.json(rows);
+    });
+  });
 
-
-// login
+// Page de connexion
 app.post('/login', (req, res) => {
-    let { username, password } = req.body;
-    username = username?.trim();
-    password = password?.trim();
+  let { username, password } = req.body;
+  username = username?.trim();
+  password = password?.trim();
 
-    if (!username || !password) {
-        return res.status(400).json({ message: "Champs manquants"});
+  if (!username || !password) {
+    return res.status(400).json({ message: "Champs manquants"});
+  }
+
+  db.get(`SELECT * FROM users WHERE username = ?`, [username], async (err, user) => {
+    if (err) return res.status(500).json({ message: "Erreur serveur"});
+    if (!user) return res.status(500).json({ message: "Utilisateur introuvable"});
+
+    const match = await bcrypt.compare(password, user.password_hash);
+    
+    req.session.userId = user.id;
+    if (!match) {
+      return res.status(401).json({ message: "Identifiants incorrects" });
     }
 
-    db.get(`SELECT * FROM users WHERE username = ?`, [username], async (err, user) => {
-        if (err) return res.status(500).json({ message: "Erreur serveur"});
-        if (!user) return res.status(500).json({ message: "Utilisateur introuvable"});
+    return res.status(200).json({
+      message: "Connexion réussie",
+      success: true
+    });
+  }); 
+});
+// Afficher la session de l'utilisateur
+app.get('/userSession', async (req, res) => {
+  console.log('Route /userSession appelée');
+  if (!req.session.userId) {
+    return res.json({ loggedIn: false });
+  } 
+  db.get(`SELECT id, username FROM users WHERE id = ?`, [req.session.userId], (err, user) => {
+    if (err) return res.status(500).json({ loggedIn: false, message: "Erreur serveur" });
+    if (!user) return res.json({ loggedIn: false, message: "User serveur" });
 
-        const match = await bcrypt.compare(password, user.password_hash);
-        if (!match) return res.status(400).json({ message: "Mot de passe incorrect"});
+    return res.json({
+      loggedIn: true,
+      username: user.username
+    });
+  });
+});
 
-        req.session.userId = user.id;
-        res.status(200).json({ message: "Connexion réussie"});
+// Obtenir les préférences de l'utilisateur
+app.get('/userProfil', (req, res) => {
+  console.log('Route /userProfil appelée');
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'Non connecté' });
+  }
+
+  db.get(
+    `SELECT avatarProfil, description, job, bio, birthdate, language, theme
+     FROM userProfil
+     WHERE userId = ?`,
+    [req.session.userId],
+    (err, row) => {
+      if (err) {
+        console.error('Erreur lors de la récupération du profil :', err);
+        return res.status(500).json({ error: 'Erreur serveur' });
+      }
+
+      if (!row) {
+        // Aucun profil → le front garde ses valeurs HTML par défaut
+        return res.json(null);
+      }
+
+      res.json(row);
+    }
+  );
+});
+
+// Mise à jour du profil (updateProfileField)
+app.patch('/profile', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'Non connecté' });
+  }
+
+  const [field, value] = Object.entries(req.body)[0];
+  const userId = req.session.userId;
+
+  db.get(`SELECT userId FROM userProfil WHERE userId = ?`, [userId], (err, row) => {
+    if (err) {
+      console.error('Erreur lors de la vérification du profil :', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    if (!row) {
+      db.run(
+        `INSERT INTO userProfil (userId, ${field}) VALUES (?, ?)`,
+        [userId, value],
+        function (err2) {
+          if (err2) {
+            console.error('Erreur lors de la création du profil :', err2);
+            return res.status(500).json({ error: 'Erreur serveur' });
+          }
+          res.json({ success: true, field, value });
+        }
+      );
+    } else {
+      db.run(
+        `UPDATE userProfil SET ${field} = ? WHERE userId = ?`,
+        [value, userId],
+        function (err2) {
+          if (err2) {
+            console.error('Erreur lors de la mise à jour du profil :', err2);
+            return res.status(500).json({ error: 'Erreur serveur' });
+          }
+          res.json({ success: true, field, value });
+        }
+      );
+    }
+  });
+});
+
+  // Route de debug pour les profils
+  app.get('/debugProfil', (_, res) => {
+    db.all('SELECT * FROM userProfil', [], (err, rows) => {
+      if (err) {
+        console.error('Erreur lors de la récupération des profils :', err);
+        return res.status(500).json({ error: 'Erreur serveur' });
+      }
+      res.json(rows);
+    });
+  });
+
+// btnDeconnect :
+// > détruite la session 
+// > modifier texte du btn d'index.html 
+// > rediriger vers index.html
+
+
+
+
+// NEWSLETTER :
+app.post('/newsletter', (req, res) => {
+    const { email } = req.body;
+    if(!email) {
+        return res.status(400).json({message: 'Email requis'});
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    if (!emailRegex.test(email)) { 
+        return res.status(400).json({ message: 'Format d’email invalide' }); 
+    } 
+    db.run(`INSERT INTO newsletter (email) VALUES (?)`, [email], function(err) {
+        if (err) {
+            if (err.code === 'SQLITE_CONSTRAINT') { 
+                return res.status(409).json({ message: 'Cet email est déjà inscrit' }); 
+            }
+            console.error('Erreur SQLite :', err);
+            return res.status(500).json({ message: 'Erreur du serveur pas d’insertion à la bdd'});
+        }
+        res.json({ message: 'Inscription réussie'});
     });
 });
-
-
-// visualiser les erreur de la base sql des users
-app.get('/debug-schema', (_, res) => {
-  db.all("PRAGMA table_info(users);", (err, rows) => {
-    if (err) return res.status(500).json({ message: 'Erreur' });
-    res.json(rows);
-  });
-});
-// Visualiser les utilisateurs inscrits
-app.get('/users', (_, res) => {
-  db.all('SELECT * FROM users', (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
-    }
-    res.json(rows);
-  });
-});
-
 // Visualiser les emails inscrit à la newsletter
 app.get('/emails', (_, res) => {
     db.all('SELECT * FROM newsletter', (err, rows) => {
@@ -159,7 +271,10 @@ app.get('/emails', (_, res) => {
     });
 });
 
-// PORT
+// Fichiers static :
+app.use(express.static('public'));
+
+// PORT :
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
