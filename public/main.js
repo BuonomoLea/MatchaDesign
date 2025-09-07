@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnHeader.href = "/profil/profil.html";
       } else {
         btnHeader.textContent = "Se connecter";
-        btnHeader.href = "login.html";
+        btnHeader.href = "/login.html";
       }
     })
     .catch(err => console.error('Erreur lors de la récupération de /userSession', err));

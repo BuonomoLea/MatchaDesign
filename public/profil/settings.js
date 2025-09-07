@@ -85,31 +85,31 @@ if (window.location.pathname.endsWith('/profil.html')) {
   // MODIFIER LA LANGUE : (a mettre à jour)
   // document.addEventListener('DOMContentLoaded', () => {
   const selectBox = document.querySelector('.custom-select');
-  if (!selectBox) return;
-
-  const selected = selectBox.querySelector('.selected');
-  const options = selectBox.querySelector('.options');
-  selected.addEventListener('click', () => {
-    options.style.display = options.style.display === 'block' ? 'none' : 'block';
-  });
-  options.querySelectorAll('li').forEach(option => {
-    option.addEventListener('click', () => {
-      selected.textContent = option.textContent;
-      selected.setAttribute('data-value', option.getAttribute('data-value'));
-      options.style.display = 'none';
-
-      
-      const langValue = option.dataset.value;
-      updateProfileField('language', langValue);
-      // changer la langue du site : (a faire)
+  if (selectBox) {
+    const selected = selectBox.querySelector('.selected');
+    const options = selectBox.querySelector('.options');
+    selected.addEventListener('click', () => {
+      options.style.display = options.style.display === 'block' ? 'none' : 'block';
     });
-  });
-  // Fermer le menu des langues si on clique à côté
-  document.addEventListener('click', (e) => {
-    if (!selectBox.contains(e.target)) {
-      options.style.display = 'none';
-    }
-  });
+    options.querySelectorAll('li').forEach(option => {
+      option.addEventListener('click', () => {
+        selected.textContent = option.textContent;
+        selected.setAttribute('data-value', option.getAttribute('data-value'));
+        options.style.display = 'none';
+
+        
+        const langValue = option.dataset.value;
+        updateProfileField('language', langValue);
+        // changer la langue du site : (a faire)
+      });
+    });
+    // Fermer le menu des langues si on clique à côté
+    document.addEventListener('click', (e) => {
+      if (!selectBox.contains(e.target)) {
+        options.style.display = 'none';
+      }
+    });
+  }
   // });
 
 
