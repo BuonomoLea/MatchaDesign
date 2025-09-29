@@ -2,6 +2,7 @@
 
 > Projet en cours de développement (certaines fonctionnalités sont en construction.)
 > Projet backend d'apprentissage visant à mettre en place un serveur Node.js avec Express, relié à une base de données SQLite3, et connecté à un frontend déjà existant.
+> Mise en place d'un profil et d'une session utilisateur personnalisé
 
 ## Inspiration 
 - Palette de couleur sur pinterest
