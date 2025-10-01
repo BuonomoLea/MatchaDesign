@@ -1,8 +1,17 @@
 # MatchaDesign
 
 > Projet en cours de développement (certaines fonctionnalités sont en construction.)
+
 > Projet backend d'apprentissage visant à mettre en place un serveur Node.js avec Express, relié à une base de données SQLite3, et connecté à un frontend déjà existant.
+
 > Mise en place d'un profil et d'une session utilisateur personnalisé
+
+## Illustration
+
+![Capture 1](public/img/illustration/103340.png)
+![Capture 2](public/img/illustration/103356.png)
+![Capture 3](public/img/illustration/104020.png)
+![Capture 4](public/img/illustration/104115.png)
 
 ## Inspiration 
 - Palette de couleur sur pinterest
