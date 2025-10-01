@@ -6,8 +6,8 @@
 
 > Mise en place d'un profil et d'une session utilisateur personnalisé
 
-![Capture 1](img/illustration/103340.png)
-![Capture 2](img/illustration/103356.png)
+![Capture 1](public/img/illustration/103356.png)
+![Capture 2](public/img/illustration/103356.png)
 
 ## Inspiration 
 - Palette de couleur sur pinterest
