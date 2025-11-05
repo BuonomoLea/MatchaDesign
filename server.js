@@ -106,24 +106,35 @@ app.post('/register', async (req, res) => {
   });
 
 // Page de connexion
-app.post('/login', (req, res) => {
+app.post('/login', (req, res, next) => {
   let { username, password } = req.body;
   username = username?.trim();
   password = password?.trim();
 
   if (!username || !password) {
-    return res.status(400).json({ message: "Champs manquants"});
+    const error = new Error("Champs manquants");
+    error.status = 400;
+    return next(error);
   }
 
   db.get(`SELECT * FROM users WHERE username = ?`, [username], async (err, user) => {
-    if (err) return res.status(500).json({ message: "Erreur serveur"});
-    if (!user) return res.status(500).json({ message: "Utilisateur introuvable"});
+    if (err) {
+      const error = new Error("Erreur serveur");
+      error.status = 500;
+      return next(error);
+    }
+    if (!user) {
+      const error = new Error("Utilisateur introuvable");
+      error.status = 404;
+      return next(error);
+    }
 
     const match = await bcrypt.compare(password, user.password_hash);
-    
     req.session.userId = user.id;
     if (!match) {
-      return res.status(401).json({ message: "Identifiants incorrects" });
+      const error = new Error("Identifiants incorrects");
+      error.status = 401;
+      return next(error);
     }
 
     return res.status(200).json({
@@ -177,48 +188,31 @@ app.get('/userProfil', (req, res) => {
   );
 });
 
-// Mise à jour du profil (updateProfileField)
-app.patch('/profile', (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'Non connecté' });
-  }
+// Mise à jour du profil (updateField)
+app.patch('/userProfil', (req, res) => {
+  console.log('PATCH body:', req.body);
+  const { userId } = req.session;
+  if (!userId) return res.status(401).json({ error: 'Non connecté' });
 
   const [field, value] = Object.entries(req.body)[0];
-  const userId = req.session.userId;
+  const allowed = ['avatarProfil','description','job','bio','birthdate','language','theme'];
+  if (!allowed.includes(field)) return res.status(400).json({ error: 'Champ non autorisé' });
 
-  db.get(`SELECT userId FROM userProfil WHERE userId = ?`, [userId], (err, row) => {
-    if (err) {
-      console.error('Erreur lors de la vérification du profil :', err);
-      return res.status(500).json({ error: 'Erreur serveur' });
+  db.run(
+    `INSERT INTO userProfil (userId, ${field})
+     VALUES (?, ?)
+     ON CONFLICT(userId) DO UPDATE SET ${field} = excluded.${field}`,
+    [userId, value],
+    function (err) {
+      if (err) {
+        console.error('Erreur SQL :', err);
+        return res.status(500).json({ error: 'Erreur serveur' });
+      }
+      res.json({ success: true, field, value });
     }
-
-    if (!row) {
-      db.run(
-        `INSERT INTO userProfil (userId, ${field}) VALUES (?, ?)`,
-        [userId, value],
-        function (err2) {
-          if (err2) {
-            console.error('Erreur lors de la création du profil :', err2);
-            return res.status(500).json({ error: 'Erreur serveur' });
-          }
-          res.json({ success: true, field, value });
-        }
-      );
-    } else {
-      db.run(
-        `UPDATE userProfil SET ${field} = ? WHERE userId = ?`,
-        [value, userId],
-        function (err2) {
-          if (err2) {
-            console.error('Erreur lors de la mise à jour du profil :', err2);
-            return res.status(500).json({ error: 'Erreur serveur' });
-          }
-          res.json({ success: true, field, value });
-        }
-      );
-    }
-  });
+  );
 });
+
 
   // Route de debug pour les profils
   app.get('/debugProfil', (_, res) => {
@@ -236,7 +230,15 @@ app.patch('/profile', (req, res) => {
 // > modifier texte du btn d'index.html 
 // > rediriger vers index.html
 
+// Middleware global de gestion des erreurs
+app.use((err, req, res, next) => {
+  console.error(err.stack);
 
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Erreur interne du serveur"
+  });
+});
 
 
 // NEWSLETTER :

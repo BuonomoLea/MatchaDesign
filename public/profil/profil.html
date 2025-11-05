@@ -9,7 +9,7 @@
     <title>Page de profil utilisateurs</title>
 </head>
 <body>
-    <main id="contenu-principal" class="container-principal profile-page">
+    <main id="contenu-principal" class="container-principal profil-page">
         <!-- Lightbox galerie d'avatars -->
         <section id="lightboxAvatar" class="lightbox-avatar">
             <div class="avatar-gallery" aria-label="Choisir un avatar">
@@ -31,7 +31,7 @@
         </section>
 
         <!-- Colonne gauche : identité -->
-        <aside class="profile-left card">
+        <aside class="profil-left card">
             <div class="top">
                 <a href="../index.html" class="return" aria-label="Retour au menu">
                     <!-- Icône retour -->
@@ -42,18 +42,18 @@
                 <h1>Mon profil</h1>            
             </div>
 
-            <section class="profile-section" aria-labelledby="titre-identite">
-                <h2 id="titre-identite">Identité</h2>
+            <section class="profil-section" aria-labelledby="titre-identity">
+                <h2 id="titre-identity">Identité</h2>
 
-                <figure class="profile-avatar">
+                <figure class="profil-avatar">
                     <img data-field="avatarProfil" id="avatarProfil" src="../img/avatar/chocolateMenBlack.png" alt="Avatar de profil actuel : femme aux cheveux bruns souriante">
                     <figcaption class="avatar-title">
                         Avatar de profil
                         <svg id="openAvatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Pro v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc.--><path d="M416.9 85.2L372 130.1L509.9 268L554.8 223.1C568.4 209.6 576 191.2 576 172C576 152.8 568.4 134.4 554.8 120.9L519.1 85.2C505.6 71.6 487.2 64 468 64C448.8 64 430.4 71.6 416.9 85.2zM338.1 164L122.9 379.1C112.2 389.8 104.4 403.2 100.3 417.8L64.9 545.6C62.6 553.9 64.9 562.9 71.1 569C77.3 575.1 86.2 577.5 94.5 575.2L222.3 539.7C236.9 535.6 250.2 527.9 261 517.1L476 301.9L338.1 164z"/></svg>
                     </figcaption>
                 </figure>
-
-                <dl class="profile-info">
+                <!-- A faire en JS -->
+                <dl class="profil-info">
                     <div>
                         <dt>Nom d’utilisateur</dt>
                         <dd>Nom</dd>
@@ -67,14 +67,19 @@
                         <dd>********</dd>
                     </div>
                 </dl>
+                <!-- Modifier  -->
+                <div class="btn-identity">
+                    <button id="btnEditAccount" type="button" class="btn-accent" aria-label="Passer en mode modification des informations de connexion">Modifier</button>
+                    <button id="btnDelete" type="button" class="btn-accent" aria-label="Suppression du compte">Supprimé le compte</button>
+                </div>
             </section>
         </aside>
 
         <!-- Colonne droite : infos perso + lang + theme -->
-        <section class="profile-right card">
-            <section class="profile-section over-visible" aria-labelledby="titre-infos">
-                <h2 class="titre-infos over-visible" id="titre-infos">Informations personnelles</h2>
-                <dl class="profile-info">
+        <section class="profil-right card">
+            <section class="profil-section over-visible" aria-labelledby="title-infos">
+                <h2 class="title-infos over-visible" id="title-infos">Informations personnelles</h2>
+                <dl class="profil-info">
                     <div>
                         <dt>Description</dt>
                         <dd data-field="description">Décris toi en une ligne</dd>
@@ -94,13 +99,12 @@
                 </dl>
 
                 <div class="btn-profils">
-                    <button id="btnModifierProfil" type="button" class="btn-accent" aria-label="Passer en mode modification du profil">Modifier</button>
+                    <button id="btnEditProfil" type="button" class="btn-accent" aria-label="Passer en mode modification du profil">Modifier</button>
                     <button id="btnDeconnect" type="button" class="btn-accent btn-deconnect" aria-label="Déconnexion du profil">Déconnexion</button>
                 </div>
 
-                
-                <section class="inline-lang over-visible" aria-labelledby="titre-langue">
-                    <h2 id="titre-langue">Langue :</h2>
+                <section class="inline-lang over-visible" aria-labelledby="title-langue">
+                    <h2 id="title-langue">Langue :</h2>
                     <div class="language-selector over-visible">
                         <div class="language-selector custom-select over-visible">
                             <div class="selected over-visible" data-field="language" data-value="fr">Français (FR)</div>
@@ -116,8 +120,8 @@
                 </section>
             </section>
             <!-- theme -->
-            <section class="profile-section" aria-labelledby="titre-theme">
-                <h2 id="titre-actions">Thème du site</h2>
+            <section class="profil-section" aria-labelledby="titre-theme">
+                <h2 id="title-actions">Thème du site</h2>
                 <div class="settings-top">
                     <div class="settings-bar">
                         <button type="button" class="btn-accent btn-theme" data-field="theme" data-theme="forest">Matcha</button>
@@ -128,9 +132,7 @@
                     </div>
                 </div>
             </section>
-
         </section>
     </main>
-
 </body>
 </html>

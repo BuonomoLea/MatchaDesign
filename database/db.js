@@ -28,8 +28,6 @@ db.serialize(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT UNIQUE NOT NULL)`);
     
-
-
 });
 
 module.exports = db;

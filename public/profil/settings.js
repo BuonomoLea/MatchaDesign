@@ -1,5 +1,5 @@
 // Envois des données au serveur :
-function updateProfileField(field, value) {
+function updateProfilField(field, value) {
   fetch('/userProfil', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -15,7 +15,7 @@ function updateProfileField(field, value) {
   })
   .catch(err => console.error(err));
 }
-
+const champs = document.querySelectorAll('.profil-right dd');
 // Code spécifique à la page profil :
 if (window.location.pathname.endsWith('/profil.html')) {
   // MODIFIER L'AVATAR :
@@ -24,63 +24,64 @@ if (window.location.pathname.endsWith('/profil.html')) {
   const avatarTheme = document.querySelectorAll(".avatar-gallery img");
   const avatarProfil = document.getElementById('avatarProfil');
   // Ouvrir/fermer bloc d'avatar
-    function toggleAvatarMenu() {
-      if (lightboxAvatar) {
-        lightboxAvatar.classList.toggle('active');
+  function toggleAvatarMenu() {
+    if (lightboxAvatar) {
+      lightboxAvatar.classList.toggle('active');
+    }
+  }
+  if (openAvatar) {
+    openAvatar.addEventListener('click', toggleAvatarMenu);
+  }
+  // Fermer au click à côté du bloc d'avatar
+  document.addEventListener('click', function(e) {
+    if (lightboxAvatar && lightboxAvatar.classList.contains('active')) {
+      if (!lightboxAvatar.contains(e.target) && e.target !== openAvatar) {
+        lightboxAvatar.classList.remove('active');
       }
     }
-    if (openAvatar) {
-      openAvatar.addEventListener('click', toggleAvatarMenu);
-    }
-    // Fermer au click à côté du bloc d'avatar
-    document.addEventListener('click', function(e) {
-      if (lightboxAvatar && lightboxAvatar.classList.contains('active')) {
-        if (!lightboxAvatar.contains(e.target) && e.target !== openAvatar) {
-          lightboxAvatar.classList.remove('active');
-        }
-      }
-    });
-    // Mettre à jour l'image de profil :
-    function changeSrcAlt() {
-      // Mettre à jour les images
-      avatarProfil.src = this.src;
-      avatarProfil.alt = this.alt;
-      const value = avatarProfil.src;
-      const field = avatarProfil.dataset.field;
-      updateProfileField(field, value);
-    }
+  });
+  // Mettre à jour l'image de profil :
+  function changeSrcAlt() {
+    // Mettre à jour les images
+    avatarProfil.src = this.src;
+    avatarProfil.alt = this.alt;
+    const value = avatarProfil.src;
+    const field = avatarProfil.dataset.field;
+    updateProfilField(field, value);
+  }
+  // (créer un tableau pour les alt à relié au src)
 
   // MODIFIER LA PRESENTATION :
-  const btnModifier = document.getElementById('btnModifierProfil');
-  const champs = document.querySelectorAll('.profile-right dd');
+  const btnEdit = document.getElementById('btnEditProfil');
+  
   let enEdition = false;
-    function modeEdition() {
-      if (!enEdition) {
-        champs.forEach(dd => {
-          let texte = dd.textContent.trim();
-          let input = document.createElement('input');
-          input.type = 'text';
-          input.value = texte;
-          input.classList.add('input-profil');
-          dd.textContent = '';
-          dd.appendChild(input);
-        })
-        btnModifier.textContent = 'Enregistrer';
-        enEdition = true;
-      } else {
-        champs.forEach(dd => {
-          const input = dd.querySelector('input');
-          if (input) {
-            const value = input.value.trim();
-            const field = dd.dataset.field;
-            dd.textContent = value; 
-            updateProfileField(field, value);
-          }
-        })
-        btnModifier.textContent = 'Modifier';
-        enEdition = false;
-      }
+  function modeEdition() {
+    if (!enEdition) {
+      champs.forEach(dd => {
+        let texte = dd.textContent.trim();
+        let input = document.createElement('input');
+        input.type = 'text';
+        input.value = texte;
+        input.classList.add('input-profil');
+        dd.textContent = '';
+        dd.appendChild(input);
+      })
+      btnEdit.textContent = 'Enregistrer';
+      enEdition = true;
+    } else {
+      champs.forEach(dd => {
+        const input = dd.querySelector('input');
+        if (input) {
+          const value = input.value.trim();
+          const field = dd.dataset.field || input.dataset.field; // <-- correction ici
+          dd.textContent = value;
+          updateProfilField(field, value);
+        }
+      });
+      btnEdit.textContent = 'Modifier';
+      enEdition = false;
     }
+  }
 
   // MODIFIER LA LANGUE : (a mettre à jour)
   // document.addEventListener('DOMContentLoaded', () => {
@@ -99,7 +100,7 @@ if (window.location.pathname.endsWith('/profil.html')) {
 
         
         const langValue = option.dataset.value;
-        updateProfileField('language', langValue);
+        updateProfilField('language', langValue);
         // changer la langue du site : (a faire)
       });
     });
@@ -112,14 +113,13 @@ if (window.location.pathname.endsWith('/profil.html')) {
   }
   // });
 
-
   // Mise à jours de l'avatar du profil :
   avatarTheme.forEach(function(img) {
     img.addEventListener('click', changeSrcAlt);
   });
   // Mise à jours du texte de présentation :
-  if (btnModifier) {
-    btnModifier.addEventListener('click', modeEdition);
+  if (btnEdit) {
+    btnEdit.addEventListener('click', modeEdition);
   }
 
 }
@@ -162,26 +162,36 @@ const THEMES = {
     '--color-background': '#6798E4'
   }
 };
+window.THEMES = THEMES;
 function applyTheme(themeName) {
   // Séléctionner le bon theme dans le tableau
   const selectedTheme = THEMES[themeName];
   if (!selectedTheme) return;
   // Modifier le root du document
   const root = document.documentElement;
+  const body = document.body;
   for (const [propriete, valeur] of Object.entries(selectedTheme)) {
     root.style.setProperty(propriete, valeur);
+    body.style.setProperty(propriete, valeur);
   }
+  forceScrollbarRepaint();
 }
-
+function forceScrollbarRepaint() {
+  const el = document.documentElement;
+  const prev = el.style.overflow;
+  el.style.overflow = 'hidden';
+  void el.offsetHeight; // force un reflow
+  el.style.overflow = prev || '';
+}
+window.applyTheme = applyTheme;
 // Appel du theme choisis
 document.querySelectorAll('[data-field="theme"]').forEach(btn => {
   btn.addEventListener('click', () => {
     const themeName = btn.dataset.theme;
     applyTheme(themeName);
-    updateProfileField('theme', themeName);
+    updateProfilField('theme', themeName);
   });
 });
-
 // Mise à jour de la page au rechargement avant modification
 document.addEventListener('DOMContentLoaded', () => {
   if (!window.location.pathname.endsWith('/profil.html')) return;

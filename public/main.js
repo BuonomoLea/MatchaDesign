@@ -1,4 +1,4 @@
-import '/profil/settings.js';
+// import '/profil/settings.js';
 
 // Register
 const registerForm = document.getElementById('registerForm');
@@ -14,7 +14,6 @@ if (registerForm) {
     alert((await res.json()).message);
   });
 }
-
 // Login et redirection
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
@@ -40,23 +39,43 @@ if (loginForm) {
     }
   });
 }
+// userSession
 document.addEventListener('DOMContentLoaded', () => {
   fetch('/userSession', { credentials: 'include', cache: 'no-store' })
     .then(res => res.json())
     .then(user => {
       const btnHeader = document.getElementById('btnHeader');
-      if (!btnHeader) return;
+      if (btnHeader) {
+        if (user && user.loggedIn) {
+          btnHeader.textContent = "Profil";
+          btnHeader.href = "/profil/profil.html";
+        } else {
+          btnHeader.textContent = "Se connecter";
+          btnHeader.href = "/login.html";
+        }
+      }
 
-      if (user.loggedIn) {
-        btnHeader.textContent = "Profil";
-        btnHeader.href = "/profil/profil.html";
+      // Utiliser loggedIn au lieu de id
+      if (user && user.loggedIn) {
+        fetch('/userProfil', { credentials: 'include' })
+          .then(res => res.json())
+          .then(profil => {
+            console.log("profil reçu:", profil);
+            if (profil && profil.theme && typeof window.applyTheme === 'function') {
+              window.applyTheme(profil.theme);
+            }
+          })
+          .catch(err => console.error('Erreur lors du chargement du profil :', err));
       } else {
-        btnHeader.textContent = "Se connecter";
-        btnHeader.href = "/login.html";
+        // Thème par défaut
+        if (typeof window.applyTheme === 'function') {
+          window.applyTheme('ocean');
+        }
       }
     })
     .catch(err => console.error('Erreur lors de la récupération de /userSession', err));
 });
+
 
 
 // slide du footer
