@@ -31,9 +31,15 @@ Theme Ocean :
 
 ## Technologies
 - Node.js / Express
-- SQLite3 (PostgreSQL à venir)
-- JavaScript (ES6+)
-- Postman (tests API)
+- body-parser pour le parsing des requêtes HTTP
+- cors pour la gestion des requêtes cross-origin
+- express-session pour les sessions utilisateurs
+- helmet pour la sécurisation des headers HTTP
+- morgan pour les logs des requêtes
+- bcrypt pour le hashage des mots de passe
+- SQLite3 comme base de données locale, migration vers PostgreSQL prévue
+- JavaScript ES6+
+- Postman pour les tests API
 
 ## Dépendances
 - express
