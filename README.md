@@ -22,21 +22,40 @@ Theme Ocean :
 
 ## Fonctionnalités actuelles
 - API REST avec routes GET et POST
-- Base de données **SQLite3** stockée en local (`./database/inscriptionNews.db`)
+- Base de données SQLite3 stockée en local (`./database/inscriptionNews.db`)
 - Création automatique des tables :
-  - **newsletter** : inscription à la newsletter (email unique)
   - **users** : gestion des utilisateurs (username, email, mot de passe hashé)
+  - **userProfil** : informations de profil liées à un utilisateur (avatar, description, job, bio, date de naissance, langue, thème)
+  - **newsletter** : inscription à la newsletter (email unique)
 - Tests des endpoints avec Postman
 
 ## Technologies
 - Node.js / Express
-- SQLite3 (MySQL à venir)
+- SQLite3 (PostgreSQL à venir)
 - JavaScript (ES6+)
 - Postman (tests API)
+
+## Dépendances
+- express
+- body-parser
+- cors
+- express-session
+- helmet
+- morgan
+- bcrypt
+- sqlite3
 
 ## Installation
 ```bash
 # Cloner le projet
 git clone https://github.com/BuonomoLea/MatchaDesign.git
 
-Installer les dépendances et lancer le serveur
+# Installer les dépendances
+npm install
+
+# Lancer le serveur
+npm start
+
+# Rechargement automatique
+npm run dev
+```
