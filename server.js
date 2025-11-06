@@ -21,10 +21,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET_PASS || 'Ma_secret_key_ultra_secure',
   resave: false,
   saveUninitialized: false,
+  rolling: true,
   cookie: {
     httpOnly: true,
     secure: false,
-    sameSite: 'lax'
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 20
   }
 }));
 
@@ -105,7 +107,7 @@ app.post('/register', async (req, res) => {
     });
   });
 
-// Page de connexion
+// LOGIN PAGE
 app.post('/login', (req, res, next) => {
   let { username, password } = req.body;
   username = username?.trim();
@@ -143,7 +145,7 @@ app.post('/login', (req, res, next) => {
     });
   }); 
 });
-// Afficher la session de l'utilisateur
+// USER SESSION
 app.get('/userSession', async (req, res) => {
   console.log('Route /userSession appelée');
   if (!req.session.userId) {
@@ -160,7 +162,7 @@ app.get('/userSession', async (req, res) => {
   });
 });
 
-// Obtenir les préférences de l'utilisateur
+// USER PREFERENCE
 app.get('/userProfil', (req, res) => {
   console.log('Route /userProfil appelée');
   if (!req.session.userId) {
@@ -188,7 +190,7 @@ app.get('/userProfil', (req, res) => {
   );
 });
 
-// Mise à jour du profil (updateField)
+// UPDATE PROFILE (updateField)
 app.patch('/userProfil', (req, res) => {
   console.log('PATCH body:', req.body);
   const { userId } = req.session;
@@ -213,7 +215,6 @@ app.patch('/userProfil', (req, res) => {
   );
 });
 
-
   // Route de debug pour les profils
   app.get('/debugProfil', (_, res) => {
     db.all('SELECT * FROM userProfil', [], (err, rows) => {
@@ -225,10 +226,41 @@ app.patch('/userProfil', (req, res) => {
     });
   });
 
-// btnDeconnect :
-// > détruite la session 
-// > modifier texte du btn d'index.html 
-// > rediriger vers index.html
+// LOGOUT
+app.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ message: "Erreur lors de la déconnexion" });
+    }
+    res.clearCookie('connect.sid');
+    return res.json({ success: true });
+  });
+});
+// DELETE USER
+app.post('/deleteAccount', (req, res) => {
+  const userId = req.session.userId;
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "Non connecté" });
+  }
+
+  // DELETE USER IN TABLE
+  db.run("DELETE FROM users WHERE id = ?", [userId], (err) => {
+    if (err) {
+      console.error("Erreur suppression utilisateur :", err);
+      return res.status(500).json({ success: false, message: "Erreur serveur" });
+    }
+
+    // DELETE SESSION
+    req.session.destroy(err => {
+      if (err) {
+        return res.status(500).json({ success: false, message: "Erreur session" });
+      }
+      res.clearCookie('connect.sid');
+      return res.json({ success: true, message: "Compte supprimé avec succès" });
+    });
+  });
+});
+
 
 // Middleware global de gestion des erreurs
 app.use((err, req, res, next) => {
@@ -239,7 +271,6 @@ app.use((err, req, res, next) => {
     message: err.message || "Erreur interne du serveur"
   });
 });
-
 
 // NEWSLETTER :
 app.post('/newsletter', (req, res) => {

@@ -16,7 +16,7 @@ function updateProfilField(field, value) {
   .catch(err => console.error(err));
 }
 const champs = document.querySelectorAll('.profil-right dd');
-// Code spécifique à la page profil :
+// Page profil :
 if (window.location.pathname.endsWith('/profil.html')) {
   // MODIFIER L'AVATAR :
   const openAvatar = document.getElementById('openAvatar');
@@ -123,8 +123,41 @@ if (window.location.pathname.endsWith('/profil.html')) {
   }
 
 }
+// BUTTON LOGOUT :
+document.addEventListener("DOMContentLoaded", () => {
+  const btnDeconnect = document.getElementById("btnDeconnect");
+  if (btnDeconnect) {
+    btnDeconnect.addEventListener("click", async () => {
+      const res = await fetch("/logout", { method: "POST", credentials: "include" });
+      const result = await res.json();
+      if (result.success) {
+        window.location.href = "../index.html";
+      }
+    });
+  }
+});
 
-// MODIFIER LE THEME :
+// BUTTON DELETE ACCOUNT :
+document.addEventListener("DOMContentLoaded", () => {
+  const btnDelete = document.getElementById("btnDelete");
+  if (btnDelete) {
+    btnDelete.addEventListener("click", async () => {
+      if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
+        const res = await fetch("/deleteAccount", { method: "POST", credentials: "include" });
+        const result = await res.json();
+        if (result.success) {
+          alert("Votre compte a été supprimé.");
+          window.location.href = "../index.html";
+        } else {
+          alert("Erreur : " + result.message);
+        }
+      }
+    });
+  }
+});
+
+
+// EDIT THEME :
 const THEMES = {
   forest: {
     '--color-primary': '#3D7337',

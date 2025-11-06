@@ -39,12 +39,13 @@ if (loginForm) {
     }
   });
 }
-// userSession
+// UserSession vérification de session et déconnexion :
 document.addEventListener('DOMContentLoaded', () => {
   fetch('/userSession', { credentials: 'include', cache: 'no-store' })
     .then(res => res.json())
     .then(user => {
       const btnHeader = document.getElementById('btnHeader');
+
       if (btnHeader) {
         if (user && user.loggedIn) {
           btnHeader.textContent = "Profil";
@@ -52,22 +53,24 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           btnHeader.textContent = "Se connecter";
           btnHeader.href = "/login.html";
+
+          // Alerte si déconnexion automatique
+          if (document.referrer.includes("profil.html")) {
+            alert("Votre session a expiré, vous avez été déconnecté automatiquement.");
+          }
         }
       }
-
-      // Utiliser loggedIn au lieu de id
+      // Gestion du thème
       if (user && user.loggedIn) {
         fetch('/userProfil', { credentials: 'include' })
           .then(res => res.json())
           .then(profil => {
-            console.log("profil reçu:", profil);
             if (profil && profil.theme && typeof window.applyTheme === 'function') {
               window.applyTheme(profil.theme);
             }
           })
           .catch(err => console.error('Erreur lors du chargement du profil :', err));
       } else {
-        // Thème par défaut
         if (typeof window.applyTheme === 'function') {
           window.applyTheme('ocean');
         }
